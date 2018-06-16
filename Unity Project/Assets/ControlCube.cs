@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static System.Math; 
-
 
 public class ControlCube : MonoBehaviour {
 	
@@ -10,21 +8,30 @@ public class ControlCube : MonoBehaviour {
 	void Start () {
 		
 	}
-
+	float velocity;
 	float x = 0;
-
+	float acceleration = 10;
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKey("w")) {
-			x += 1.0f;
+			velocity += acceleration * Time.deltaTime;
 		} else {
-			x -= 0.5f;
+			if (velocity > 0) {
+				velocity -= acceleration * Time.deltaTime;
+			}
 		}
 		if (Input.GetKey("s")) {
-			x -= 1.0f;
+			velocity -= acceleration * Time.deltaTime;
+		} else {
+			if (velocity < 0) {
+				velocity += acceleration * Time.deltaTime;
+			}
 		}
-
-		transform.Translate(Vector3.forward * 100 - Math.Pow(x, 2) * Time.deltaTime);
+		//velocity = 100 - (x * x);
+		if (velocity <= 0.01 & velocity >= -0.01) {
+			velocity = 0;
+		} 
+		transform.Translate(Vector3.forward * velocity * Time.deltaTime);
 		
 		if (Input.GetKey("d")) {
 			transform.Rotate(0.0f,1f,0.0f);
